@@ -1,38 +1,57 @@
 version: "3.9"
 services:
-  db:
-    container_name: kanban-board-db
-    image: postgres:15-alpine
-    environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-    ports:
-      - ${DB_PORT}:5432
-    volumes:
-        - ./postgres:/var/lib/postgresql/data
-    networks:
-      - db
-  api:
-    container_name: kanban-board-api
-    build:
-      context: ${API_PATH}
-      dockerfile: Dockerfile.dev
-    environment:
-      - PORT=${API_PORT}
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-    ports:
-      - ${API_PORT}:8000
-    volumes:
-      - ${API_PATH}:/app
-    networks:
-      - db
-    depends_on:
-      - db
+    db:
+        container_name: kanban-board-db
+        image: postgres:15-alpine
+        environment:
+          - POSTGRES_DB=${DB_NAME}
+          - POSTGRES_USER=${DB_USER}
+          - POSTGRES_PASSWORD=${DB_PASSWORD}
+        ports:
+          - ${DB_PORT}:5432
+        volumes:
+            - ./postgres:/var/lib/postgresql/data
+        networks:
+          - db
+    api:
+        container_name: kanban-board-api
+        build:
+          context: ${API_PATH}
+          dockerfile: Dockerfile.dev
+        environment:
+          - PORT=${API_INTERNAL_PORT}
+          - HASURA_PORT=${HASURA_PORT}
+          - DB_HOST=${DB_HOST}
+          - DB_PORT=${DB_PORT}
+          - DB_NAME=${DB_NAME}
+          - DB_USER=${DB_USER}
+          - DB_PASSWORD=${DB_PASSWORD}
+        ports:
+          - ${API_PORT}:${API_INTERNAL_PORT}
+        volumes:
+          - ${API_PATH}:/app
+        networks:
+          - db
+          - hasura
+        depends_on:
+          - db
+          - hasura
+    graphql-engine:
+        image: hasura/graphql-engine:latest
+        ports:
+            - ${HASURA_PORT}:8080
+        restart: always
+        environment:
+            HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:@postgres:5432/postgres
+            HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+            ## uncomment next line to set an admin secret
+            # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+        networks:
+            - db
+            - hasura
+        depends_on:
+            - db
 networks:
-  db:
+    db:
+    hasura:
 
