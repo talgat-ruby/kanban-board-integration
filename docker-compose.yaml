@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:5432
+    volumes:
+        - ./postgres:/var/lib/postgresql/data
+    networks:
+      - db
+  api:
+    build:
+      context: ${API_PATH}
+      dockerfile: Dockerfile.dev
+    environment:
+      - PORT=${API_PORT}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+    ports:
+      - ${API_PORT}:8000
+    volumes:
+      - ${API_PATH}:/app
+    networks:
+      - db
+    depends_on:
+      - db
+networks:
+  db:
+
