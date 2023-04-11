@@ -35,17 +35,18 @@ services:
           - hasura
         depends_on:
           - db
-          - hasura
+          - graphql-engine
     graphql-engine:
+        container_name: kanban-board-graphql-engine
         image: hasura/graphql-engine:latest
         ports:
             - ${HASURA_PORT}:8080
         restart: always
         environment:
-            HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:@postgres:5432/postgres
+            HASURA_GRAPHQL_DATABASE_URL: postgres://kanbansuperuser:kanban4ever@db:5432/app
             HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
             ## uncomment next line to set an admin secret
-            # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+            HASURA_GRAPHQL_ADMIN_SECRET: adminsecret
         networks:
             - db
             - hasura
