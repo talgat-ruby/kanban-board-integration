@@ -1,0 +1,17 @@
+FROM golang:1.20
+
+# Add Maintainer Info
+LABEL maintainer="Talgat Saribayev <talgat.s@protonmail.com>"
+
+# Copy file to workdir
+WORKDIR /app
+COPY . .
+
+# Install modules
+RUN go mod download
+
+# Install air
+RUN go get -u github.com/cosmtrek/air
+
+EXPOSE 8000
+CMD ["air"]
