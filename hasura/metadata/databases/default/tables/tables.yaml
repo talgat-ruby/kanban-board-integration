@@ -1,1 +1,5 @@
+- "!include public_boards.yaml"
+- "!include public_columns.yaml"
+- "!include public_subtasks.yaml"
+- "!include public_tasks.yaml"
 - "!include public_test_one.yaml"

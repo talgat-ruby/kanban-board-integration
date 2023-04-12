@@ -1,0 +1,15 @@
+table:
+  name: columns
+  schema: public
+object_relationships:
+  - name: board
+    using:
+      foreign_key_constraint_on: board_id
+array_relationships:
+  - name: tasks
+    using:
+      foreign_key_constraint_on:
+        column: column_id
+        table:
+          name: tasks
+          schema: public

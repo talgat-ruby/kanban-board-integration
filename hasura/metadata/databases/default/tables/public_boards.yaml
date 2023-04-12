@@ -1,0 +1,11 @@
+table:
+  name: boards
+  schema: public
+array_relationships:
+  - name: columns
+    using:
+      foreign_key_constraint_on:
+        column: board_id
+        table:
+          name: columns
+          schema: public

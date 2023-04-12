@@ -1,0 +1,7 @@
+table:
+  name: subtasks
+  schema: public
+object_relationships:
+  - name: task
+    using:
+      foreign_key_constraint_on: task_id

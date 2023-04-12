@@ -1,0 +1,15 @@
+table:
+  name: tasks
+  schema: public
+object_relationships:
+  - name: column
+    using:
+      foreign_key_constraint_on: column_id
+array_relationships:
+  - name: subtasks
+    using:
+      foreign_key_constraint_on:
+        column: task_id
+        table:
+          name: subtasks
+          schema: public
