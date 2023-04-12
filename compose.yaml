@@ -46,7 +46,7 @@ services:
             HASURA_GRAPHQL_DATABASE_URL: postgres://kanbansuperuser:kanban4ever@db:5432/app
             HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
             ## uncomment next line to set an admin secret
-            HASURA_GRAPHQL_ADMIN_SECRET: adminsecret
+            HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
         networks:
             - db
             - hasura
@@ -59,7 +59,7 @@ services:
           context: ./cli
         environment:
             HASURA_GRAPHQL_ENDPOINT: http://graphql-engine:8080
-            HASURA_GRAPHQL_ADMIN_SECRET: adminsecret
+            HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
         volumes:
             - ./hasura:/app
         networks:
