@@ -1,5 +1,6 @@
 
-CREATE TABLE "public"."subtasks" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "title" text NOT NULL, "isCompleted" boolean NOT NULL DEFAULT false, PRIMARY KEY ("id") );COMMENT ON TABLE "public"."subtasks" IS E'subtasks of tasks which are basically checklists';
+
+CREATE TABLE "public"."subtasks" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "title" text NOT NULL, "is_completed" boolean NOT NULL DEFAULT false, PRIMARY KEY ("id") );COMMENT ON TABLE "public"."subtasks" IS E'subtasks of tasks which are basically checklists';
 CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -75,10 +76,8 @@ COMMENT ON TRIGGER "set_public_boards_updated_at" ON "public"."boards"
 IS 'trigger to set value of column "updated_at" to current timestamp on row update';
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
-alter table "public"."subtasks" add column "task_d" uuid
+alter table "public"."subtasks" add column "task_id" uuid
  null;
-
-alter table "public"."subtasks" rename column "task_d" to "task_id";
 
 alter table "public"."subtasks"
   add constraint "subtasks_task_id_fkey"
@@ -103,3 +102,4 @@ alter table "public"."columns"
   foreign key ("board_id")
   references "public"."boards"
   ("id") on update cascade on delete cascade;
+

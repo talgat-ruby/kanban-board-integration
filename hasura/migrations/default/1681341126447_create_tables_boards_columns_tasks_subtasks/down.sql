@@ -1,4 +1,3 @@
-
 alter table "public"."columns" drop constraint "columns_board_id_fkey";
 
 -- Could not auto-generate a down migration.
@@ -14,8 +13,6 @@ alter table "public"."tasks" drop constraint "tasks_column_id_fkey";
 --  null;
 
 alter table "public"."subtasks" drop constraint "subtasks_task_id_fkey";
-
-alter table "public"."subtasks" rename column "task_id" to "task_d";
 
 -- Could not auto-generate a down migration.
 -- Please write an appropriate down migration for the SQL below:
