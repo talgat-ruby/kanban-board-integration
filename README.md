@@ -37,3 +37,9 @@ make pull-latest
 ```bash
 make hasura migrate apply
 ```
+
+3. Add seed
+
+```bash
+make hasura seed apply
+```
