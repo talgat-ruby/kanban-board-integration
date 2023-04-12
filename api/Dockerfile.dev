@@ -9,7 +9,7 @@ WORKDIR /app
 RUN go install github.com/cosmtrek/air@latest
 
 # Install hasura
-RUN go install github.com/hasura/graphql-engine/cli/cmd/hasura
+RUN go install github.com/hasura/graphql-engine/cli/cmd/hasura@latest
 
 # Copy file to workdir
 COPY . .
