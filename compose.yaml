@@ -52,6 +52,24 @@ services:
             - hasura
         depends_on:
             - db
+    hasura-cli:
+        container_name: kanban-board-hasura-cli
+        restart: unless-stopped
+        build:
+          context: ./cli
+        environment:
+            HASURA_GRAPHQL_ENDPOINT: http://graphql-engine:8080
+            HASURA_GRAPHQL_ADMIN_SECRET: adminsecret
+        volumes:
+            - ./hasura:/app
+        networks:
+            - db
+            - hasura
+        depends_on:
+            - db
+            - graphql-engine
+        command: tail -F anything
+
 networks:
     db:
     hasura:

@@ -1,3 +1,5 @@
+ARGUMENTS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+
 .PHONY: pull-latest
 pull-latest:
 		$(MAKE) pull-latest/api
@@ -12,3 +14,7 @@ pull-latest/api: api/
 pull-latest/ui: ui/
 		git fetch ui main
 		git subtree pull --prefix ui ui main --squash
+
+.PHONY: hasura
+hasura:
+		docker compose exec hasura-cli hasura $(ARGUMENTS)
