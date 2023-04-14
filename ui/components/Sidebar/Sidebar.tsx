@@ -1,20 +1,17 @@
+import { IBoard } from "@/types/boards";
+import Aside from "@/components/Aside";
+
 async function Sidebar() {
   try {
-    const res = await fetch("http://localhost:3000/api/board");
+    const res = await fetch("http://localhost:3000/api/boards");
 
     if (!res.ok) {
       await Promise.reject(res.statusText);
     }
 
-    const boards: string[] = await res.json();
+    const boards: IBoard[] = await res.json();
 
-    return (
-      <ul>
-        {boards.map((board) => (
-          <li key={board}>{board}</li>
-        ))}
-      </ul>
-    );
+    return <Aside boards={boards} />;
   } catch (e) {
     console.log(e);
     return null;
