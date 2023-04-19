@@ -1,4 +1,5 @@
 ARGUMENTS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+CFLAGS = -c
 
 .PHONY: pull-latest
 pull-latest:
@@ -18,3 +19,18 @@ pull-latest/ui: ui/
 .PHONY: hasura
 hasura:
 		docker compose exec hasura-cli hasura $(ARGUMENTS)
+
+.PHONY: db
+db:
+		docker compose exec db $(ARGUMENTS)
+
+.PHONY: db-reset, bash
+db-reset:
+		$(MAKE) db bash -- $(CFLAGS) "'psql -U \$$POSTGRES_USER -d \$$POSTGRES_DB < /home/cmd/reset.sql'"
+
+.PHONY: db-reset-all
+db-reset-all:
+		$(MAKE) db-reset || true
+		$(MAKE) hasura migrate delete -- --all --server || true
+		$(MAKE) hasura migrate apply || true
+		$(MAKE) hasura seed apply || true
