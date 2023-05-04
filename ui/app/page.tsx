@@ -1,9 +1,5 @@
-import Sidebar from "@/components/Sidebar";
+import Page from "@/components/Page";
 
 export default function Home() {
-  return (
-    <div>
-      <Sidebar />
-    </div>
-  );
+  return <Page />;
 }

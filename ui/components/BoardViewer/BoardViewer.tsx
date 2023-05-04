@@ -1,51 +1,47 @@
-import { IBoardWithColumnsWithTasksWithSubtasksAggr } from "@/types/boards";
+import clsx from "clsx";
+import ModalUpdateTask from "@/components/ModalUpdateTask";
+import { TFetchBoardResult } from "@/app/api/types";
+import styles from "./BoardViewer.module.css";
 
 interface IProps {
-  id: string;
+  board: TFetchBoardResult;
 }
 
-async function BoardViewer({ id }: IProps) {
-  if (!id) {
-    return null;
-  }
-
-  try {
-    const res = await fetch(`http://localhost:3000/api/boards/${id}`);
-
-    if (!res.ok) {
-      await Promise.reject(res.statusText);
-    }
-
-    const board: IBoardWithColumnsWithTasksWithSubtasksAggr = await res.json();
-
-    return (
-      <main>
-        <h1>{board.name}</h1>
-        <ul className="flex justify-between">
+async function BoardViewer({ board }: IProps) {
+  return (
+    <main className="flex-auto max-h-screen pt-[--header-height] flex flex-col bg-light-2 overflow-auto">
+      <div className="px-[1.5rem] pt-[1.5rem] pb-[3.125rem] flex">
+        <ul className="flex-auto flex">
           {board.columns.map((column) => (
-            <li key={column.id} className="ml-1">
+            <li
+              key={column.id}
+              className="flex-auto flex flex-col space-x-[1.5rem]"
+            >
               <h3>{column.name}</h3>
-              <ul>
+              <ul className="flex flex-col space-y-[1.25rem]">
                 {column.tasks.map((task) => (
-                  <li key={task.id} className="w-3 h-3 border-2">
+                  <li
+                    key={task.id}
+                    className={clsx(
+                      "flex flex-col justify-center px-[1rem] w-[17.5rem] h-[5.5rem] bg-light-1 rounded-[.5rem]",
+                      styles.shadow
+                    )}
+                  >
                     <h4>{task.title}</h4>
-                    <p>{task.description}</p>
                     <p>
-                      {task?.done_subtasks?.aggregate?.count} of{" "}
-                      {task?.all_subtasks.aggregate?.count}
+                      {task?.doneSubtasks?.aggregate?.count} of{" "}
+                      {task?.allSubtasks?.aggregate?.count}
                     </p>
+                    <ModalUpdateTask task={task} columns={board.columns} />
                   </li>
                 ))}
               </ul>
             </li>
           ))}
         </ul>
-      </main>
-    );
-  } catch (e) {
-    console.error(e);
-    return null;
-  }
+      </div>
+    </main>
+  );
 }
 
 export default BoardViewer;

@@ -1,0 +1,23 @@
+.input {
+    @apply sr-only
+}
+
+.container {
+    @apply w-[2.5rem] h-[1.25rem] flex items-center bg-purple-1 rounded-[.75rem]
+}
+
+.container:hover {
+    @apply bg-purple-2
+}
+
+.circle {
+    @apply ml-[.1875rem] h-[.875rem] w-[.875rem] bg-light-1 rounded-full transition-all duration-200 ease-in
+}
+
+.input:focus ~ .container {
+    @apply ring-[.125rem] ring-purple-2
+}
+
+.input:checked ~ .container > .circle {
+    @apply translate-x-[1.25rem]
+}
